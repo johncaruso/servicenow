@@ -1,14 +1,10 @@
-# Contribute to Servicenow repository
+# Contribute to this project
 
 This guide details how to use issues and pull requests to improve the shared code samples on this repository.
 
 Please stick as close as possible to the guidelines. That way we ensure quality guides and easy to merge requests.
 
-Your Pull Request will be reviewed by one of our devs/volunteers and you will be asked to reformat it if needed. We don't bite and we will try to be as flexible
-as possible, so don't get intimidated by the extent of the guidelines :)
-
-For better maintainance and clarity, some naming guidelines should be followed. 
-See details in each section below.
+For better maintainance and clarity, some naming guidelines should be followed.
 
 ## Pull Request title
 
@@ -19,12 +15,9 @@ information about Servicenow version, OS tested on and any other relevant info.
 
 For example some good titles would be:
 
-* [Catalog Client Script] Verify Phone number - Geneva
-* [UI Page] 
+* [Type of thing] Name of thing
+* [Catalog Client Script] Verify Phone number
+* [UI Page] server decom.xhtml
 * [Update set] Example Item with form validation
+* [Multiple files]
 
-### Scripts doing similar things
-
-There is a strong possibility that your script will do similar things to what a
-script already in this repo do. In that case, please work on the existing script
-and enhance it with your changes. No need to duplicate things.

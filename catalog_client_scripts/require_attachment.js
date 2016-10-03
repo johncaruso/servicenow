@@ -1,4 +1,3 @@
-/*global g_form, gel, GlideRecord, alert*/
 function onSubmit() {
     'use strict';
     var attachment = new GlideRecord("sys_attachment");

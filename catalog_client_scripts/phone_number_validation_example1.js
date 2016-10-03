@@ -1,6 +1,4 @@
-/*global g_form*/
 function onChange(control, oldValue, newValue, isLoading) {
-    'use strict';
     if (isLoading || newValue === '') { //if loading, or newvalue is empty
         return;
     }

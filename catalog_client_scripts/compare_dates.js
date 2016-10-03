@@ -1,6 +1,4 @@
-/*global g_form,GwtDate, getDateFromFormat, g_user_date_time_format, alert*/
 function onSubmit() {
-    'use strict';
     //validate that the start date is before the end date
     var st = getDateFromFormat(g_form.getValue("resource_start_date"), g_user_date_time_format);
     var et = getDateFromFormat(g_form.getValue("resource_est_end_date"), g_user_date_time_format);

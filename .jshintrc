@@ -1,0 +1,13 @@
+{
+    "devel": true,
+    "undef": true,
+    "unused": false,
+    "predef": [
+        "GlideRecord",
+        "g_form",
+        "gel",
+        "GwtDate",
+        "getDateFromFormat",
+        "g_user_date_time_format"
+    ]
+}
