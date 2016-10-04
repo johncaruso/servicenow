@@ -5,12 +5,8 @@
 # Contributing
   
   See [CONTRIBUTING.MD](https://github.com/jacebenson/servicenow/blob/master/CONTRIBUTING.md)
-
-# Authors
-
-    Jace Benson - Initial work
-
-See also the list of [contributors](https://github.com/jacebenson/servicenow/contributors) who participated in this project.
+  
+  See also the list of [contributors](https://github.com/jacebenson/servicenow/contributors) who participated in this project.
 
 
 # Acknowledgments

@@ -8,6 +8,7 @@ For better maintainance and clarity, some naming guidelines should be followed.
 
 ## Getting Started
 
+### SSH Keys (Skip if you have them set up)
 If you don't have a SSH key, you'll probably want one, so you can easily make changes
 https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
 
@@ -27,15 +28,14 @@ Copy the text to your github account
 
 https://github.com/settings/keys
 
-Fork this repo in the Github GUI
-
+### Actually Contributing
 Now that's all done, you get clone the repo and start contributing
 
-If you want it drop in a folder called "servicenow" just do this;
+Fork this repo in the Github GUI
 
 `git clone git@github.com:youraccounthere/servicenow.git`
 
-Now, modify the CONTRIBUTING.md and add your name to the list of authors
+Now, modify the CONTRIBUTORS.md and add your name to the list of authors
 Then add whatever you like based on the naming convention below;
 
 ## Pull Request title
