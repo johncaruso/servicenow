@@ -5,9 +5,6 @@
 # Contributing
   
   See [CONTRIBUTING.MD](https://github.com/jacebenson/servicenow/blob/master/CONTRIBUTING.md)
-  
-  See also the list of [contributors](https://github.com/jacebenson/servicenow/contributors) who participated in this project.
-
 
 # Acknowledgments
 

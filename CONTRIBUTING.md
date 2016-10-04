@@ -28,7 +28,7 @@ Copy the text to your github account
 
 https://github.com/settings/keys
 
-### Actually Contributing
+### Actually Contributing (Start here if you have SSH Keys)
 Now that's all done, you get clone the repo and start contributing
 
 Fork this repo in the Github GUI
@@ -36,7 +36,13 @@ Fork this repo in the Github GUI
 `git clone git@github.com:youraccounthere/servicenow.git`
 
 Now, modify the CONTRIBUTORS.md and add your name to the list of authors
-Then add whatever you like based on the naming convention below;
+Then add whatever you like based on the naming convention below.
+
+When complete be sure to `git add` your modifications;
+
+`git commit -m "Some details here"`
+
+`git push`
 
 ## Pull Request title
 
