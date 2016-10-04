@@ -44,6 +44,8 @@ When complete be sure to `git add` your modifications;
 
 `git push`
 
+Then goto the Github GUI, goto your forked repo, click "New pull request" and submit it.
+
 ## Pull Request title
 
 Try to be as more descriptive as you can in your Pull Request title.
