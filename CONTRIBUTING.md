@@ -12,19 +12,27 @@ If you don't have a SSH key, you'll probably want one, so you can easily make ch
 https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
 
 `ssh-keygen -t rsa -b 4096 -C "email@example.com"`
+
 Then
+
 `eval "$(ssh-agent -s)"`
+
 `ssh-add ~/.ssh/id_rsa`
 
 Adding the SSH key to github.com
+
 `cat ~/.ssh/id_rsa.pub`
+
 Copy the text to your github account
+
 https://github.com/settings/keys
 
-Fork this repo;
+Fork this repo in the Github GUI
 
 Now that's all done, you get clone the repo and start contributing
+
 If you want it drop in a folder called "servicenow" just do this;
+
 `git clone git@github.com:youraccounthere/servicenow.git`
 
 Now, modify the CONTRIBUTING.md and add your name to the list of authors
