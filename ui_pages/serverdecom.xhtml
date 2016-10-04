@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+<g:evaluate>
+var sServer = gs.getSession().getClientData('server');
+    var step = parseInt( RP.getParameterValue("step"),10) || 1;
+    var formObj = {};
+    getFormValue('servers', '');
+    getFormValue('project', '');
+    getFormValue('display_hidden.project', '');
+    function getFormValue(name, defaultValue){
+        formObj[name] = RP.getParameterValue(name) || defaultValue;
+    }
+    var serversArray = formObj.servers.toString().split('\n');
+    var serverIndex = 0;
+    for(var x=0;x!=serversArray.length;x++){
+        getFormValue('s-' + x, '');//server sys_id;
+        getFormValue('r-' + x, 'off');//on = redeployable
+        getFormValue('d-' + x, 'off');//on = hasdatabase
+        getFormValue('p-' + x, '');//projects
+    }
+    var stringified = new JSON().encode(formObj);
+</g:evaluate>
+<div class="container" style="overflow-y: scroll; height:650px; width:100%">
+<h2>Server Decom</h2>
+    <p>By submitting this item, a series of catalog tasks are generated to fully decommission a server. $[SP]They will also be approval required by various groups to insure the server can be safely decommissioned as well.</p>
+<p>The result of this process to fully remove and decommission the server and the Configuration Item is marked as Decommissioned in the ServiceNow CMDB.</p>
+    <form id="decomForm" method="post">
+        <j:choose>
+            <j:when test="${step==1}">
+                <div class="form-group">
+                    <label for="servers">Servers</label>
+                    <textarea class="form-control" id="servers" name="servers"></textarea>
+                    <textarea class="hide form-control" id="goodServers" name="goodServers"></textarea>
+                    <div class="hide alert alert-info" role="alert" id="servers-info">
+                    </div>
+                    <div class="hide alert alert-danger" role="alert" id="servers-error">
+                    </div>
+                     <label for="project">Project</label>
+                    <g:ui_reference class="text"
+                    name="project"
+                    id="project"
+                    table="pm_project"
+                    query="active=true"
+                    size="50"
+                    />
+                </div>
+                <input name="step" value="${step+1}" type="hidden" />
+            </j:when>
+            <j:when test="${step==2}">
+                <div class="form-group">
+                    <label for="project"></label>Project: ${formObj['display_hidden.project']}
+                    <input type="hidden" value="${formObj.project}" id="project"/>
+                    <input type="hidden" value="${formObj['display_hidden.project']}" id="display_hidden.project"/>
+                </div>
+                <div class="form-group hide">
+                    <label for="servers">Servers</label>
+                    <textarea class="form-control" name="servers">${formObj.servers}</textarea>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <th>Server</th>
+                        <th>Redeployable</th>
+                        <th>Has Database</th>
+                    </thead>
+                    <j:while test="${serverIndex!=serversArray.length}">
+                        <tr>
+                            <td>
+                                <a target="_blank" href="/cmdb_ci_server.do?sysparm_query=name=${serversArray[serverIndex]}">${serversArray[serverIndex]}</a>
+                                <input name="s-${serverIndex.toFixed(0)}" value="${serversArray[serverIndex]}" type="hidden" />
+                                <input name="p-${serverIndex.toFixed(0)}" value="${formObj.project}" type="hidden"/>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                      <input name="r-${serverIndex.toFixed(0)}" class="form-check-input redeployable" type="checkbox"/>
+                                      $[SP]Redeployable
+                                  </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                      <input name="d-${serverIndex.toFixed(0)}" class="form-check-input hasdatabase" type="checkbox" />
+                                      $[SP]Has Database
+                                  </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <g:evaluate>
+                            serverIndex++;
+                        </g:evaluate>
+                    </j:while>
+                        <thead>
+                            <td>
+                                Total (${serverIndex.toFixed(0)})
+
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                      <input name="r-checkall" id="r-checkall" class="form-check-input" type="checkbox"/>
+                                      $[SP]Check all
+                                  </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                      <input name="d-checkall" id="d-checkall" class="form-check-input" type="checkbox"/>
+                                      $[SP]Check All
+                                  </label>
+                                </div>
+                            </td>
+                        </thead>
+                        
+                </table>
+                <input name="step" value="${step+1}" type="hidden" />
+            </j:when>
+            <j:when test="${step==3}">
+                <g:evaluate>
+                    var serversArray = formObj.servers.toString().split('\n');
+                    var si = 0;
+                    var r = [];
+                    for (var x=0;x!=serversArray.length;x++){
+                        var cartId = GlideGuid.generate(null);
+                        var cart = new Cart(cartId);
+                        var cartGR = cart.getCart();  
+                        cartGR.requested_for = gs.getUserID();
+                        cartGR.update();
+                        var vars = {
+                            server       : formObj['s-' + x],
+                            redeployable : formObj['r-' + x] == 'on' ? 'true' : 'false',
+                            hasdatabase  : formObj['d-' + x] == 'on' ? 'true' : 'false',
+                            project      : formObj['p-' + x]
+                        };
+                        var varsStringified = new JSON().encode(vars);
+
+                        var item = cart.addItem(gs.getProperty('fico.serverdecom.item'));
+                        //cart.setVariable(item, 'server_decom_prepinfo', varsStringified);
+                        var cmdb_ci_server = new GlideRecord('cmdb_ci_server');
+                        cmdb_ci_server.addQuery('name',vars.server);
+                        cmdb_ci_server.addEncodedQuery(gs.getProperty('fico.serverdecom.query'));
+                        cmdb_ci_server.query();
+                    if(cmdb_ci_server.next()){
+                    
+                        cart.setVariable(item, 'server_decom_name', cmdb_ci_server.sys_id.toString());
+                        cart.setVariable(item, 'server_decom_redeployable', vars.redeployable);
+                        cart.setVariable(item, 'server_decom_db', vars.hasdatabase);
+                        cart.setVariable(item, 'gts_project', vars.project);
+                    }
+
+                        var rc = cart.placeOrder();
+                        var ritm = new GlideRecord('sc_req_item');
+                        if(ritm.get('request.number', rc.number)){
+                            r.push({
+                                'request': rc.number,
+                                'ritm': ritm.number,
+                                'server': ritm.variables.server_decom_name.getDisplayValue(),
+                                'hasdatabase': ritm.variables.server_decom_db,
+                                'reployable' : ritm.variables.server_decom_redeployable,
+                                'project' : ritm.variables.gts_project
+                            });
+                        }
+                    }
+                </g:evaluate>
+                <div class="alert alert-success" role="alert">
+                    ${gs.getMessage('Thank you, your request has been submitted')}
+                </div>
+                
+                <h4>Submitted the following Request(s)</h4>
+                <table class="table">
+                        <thead>
+                            <td>Request #</td>
+                            <td>Requested Item #</td>
+                            <td>Server</td>
+                            <!--<td>Project</td>-->
+                        </thead>
+                    
+                <j:while test="${si!=serversArray.length}">
+                        <tr>
+                            <td>
+                                <a href="sc_request.do?sysparm_query=number=${r[si.toFixed(0)].request}">${r[si.toFixed(0)].request}</a>
+                            </td>
+                            <td>
+                                <a href="sc_req_item.do?sysparm_query=number=${r[si.toFixed(0)].ritm}">${r[si.toFixed(0)].ritm}</a>
+                            </td>
+                            <td>
+                                ${r[si.toFixed(0)].server}
+                            </td>
+                            <!--<td>
+                                ${r[si.toFixed(0)].project}
+                            </td>-->
+                        </tr>
+                    <g:evaluate>
+                        si++;
+                    </g:evaluate>
+                </j:while>
+                </table>
+            </j:when>
+        </j:choose>
+
+        <j:if test="${step!=3}">
+            <button id="submit" type="submit" class="btn btn-primary" style="padding:2px 6px 2px 6px">Submit</button>
+        </j:if>
+        $[SP]<a class="btn cat-btn btn-danger" style="padding:2px 6px 2px 6px;margin-left: 10px;" href="serverdecom.do">Start Over</a>
+    </form>
+</div>
+</j:jelly>
